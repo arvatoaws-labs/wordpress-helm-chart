@@ -21,6 +21,8 @@ Todos V2
 * [ ] add nginx rate limit for dynamic calls
 * [ ] add security headers
 * [ ] add ip auth for wp-admin?
+* [ ] add internal php upstream for status
+* [ ] add pod disruption budget
 * [ ] create grafana dashboard
 * [ ] TBD
 
