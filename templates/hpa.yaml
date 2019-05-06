@@ -1,0 +1,17 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "wordpress.fullname" . }}
+  labels:
+    app: "{{ template "wordpress.fullname" . }}"
+    chart: "{{ template "wordpress.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}  
+spec:
+  maxReplicas: 10
+  minReplicas: {{ .Values.replicaCount }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "wordpress.fullname" . }}
+  targetCPUUtilizationPercentage: 80
