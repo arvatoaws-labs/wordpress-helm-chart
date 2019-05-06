@@ -2,6 +2,7 @@
 
 Bugs
 * [ ] WORDPRESS_BLOGURL should only contain the first entry from the ingress list
+* [ ] fix inspec tests
 
 Todos V1
 * [ ] use php config from values.yaml in configmap
