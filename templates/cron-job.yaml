@@ -1,0 +1,58 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ include "wordpress.fullname" . }}-cron
+  labels:
+    app.kubernetes.io/name: {{ include "wordpress.name" . }}
+    helm.sh/chart: {{ include "wordpress.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: wordpress-cron
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            workingDir: /app
+            command:
+            - /run-cron.sh
+            env:
+            - name: MYSQL_HOST
+            {{- if .Values.mariadb.enabled }}
+              value: {{ template "mariadb.fullname" . }}
+            {{- else }}
+              value: {{ .Values.externalDatabase.host | quote }}
+            {{- end }}
+            - name: MYSQL_PORT
+            {{- if .Values.mariadb.enabled }}
+              value: "3306"
+            {{- else }}
+              value: {{ .Values.externalDatabase.port | quote }}
+            {{- end }}
+            - name: MYSQL_DATABASE
+            {{- if .Values.mariadb.enabled }}
+              value: {{ .Values.mariadb.db.name | quote }}
+            {{- else }}
+              value: {{ .Values.externalDatabase.database | quote }}
+            {{- end }}
+            - name: MYSQL_USER
+            {{- if .Values.mariadb.enabled }}
+              value: {{ .Values.mariadb.db.user | quote }}
+            {{- else }}
+              value: {{ .Values.externalDatabase.user | quote }}
+            {{- end }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                {{- if .Values.mariadb.enabled }}
+                  name: {{ template "mariadb.fullname" . }}
+                  key: mariadb-password
+                {{- else }}
+                  name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+                  key: db-password
+                {{- end }}
+          restartPolicy: OnFailure

@@ -238,7 +238,7 @@ data:
     ;       anything, but it may not be a good idea to use the .php extension or it
     ;       may conflict with a real PHP file.
     ; Default Value: not set
-    pm.status_path = /status
+    pm.status_path = /fpm-status
 
     ; The ping URI to call the monitoring page of FPM. If this value is not set, no
     ; URI will be recognized as a ping page. This could be used to test from outside
@@ -250,7 +250,7 @@ data:
     ;       anything, but it may not be a good idea to use the .php extension or it
     ;       may conflict with a real PHP file.
     ; Default Value: not set
-    ping.path = /ping
+    ping.path = /fpm-ping
 
     ; This directive may be used to customize the response of a ping request. The
     ; response is formatted as text/plain with a 200 response code.
@@ -554,37 +554,48 @@ data:
     ;  - /usr otherwise
     include=/etc/php/7.2/fpm/pool.d/*.conf
   nginx.conf: |-
-    daemon            off;
-    worker_processes  1;
+    daemon off;
+    worker_processes 1;
     
+    error_log /dev/stderr warn;
     pid /tmp/nginx.pid;
     
     events {
-        use           epoll;
-        worker_connections  128;
+      use epoll;
+      worker_connections 128;
     }
     
-    error_log          /dev/stderr info;
-    
     http {
-        server_tokens off;
-        include       mime.types;
-        charset       utf-8;
+      include /etc/nginx/mime.types;
+      default_type application/octet-stream;
     
-        access_log    /dev/stdout combined;
+      log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                          '$status $body_bytes_sent "$http_referer" '
+                          '"$http_user_agent" "$http_x_forwarded_for"';
     
-      
+      access_log /dev/stdout main;
+      error_log /dev/stderr;
+    
+      sendfile on;
+      #tcp_nopush     on;
+    
+      keepalive_timeout 65;
+    
+      gzip on;
+    
+      include /etc/nginx/conf.d/*.conf;
+    
       # WordPress single site rules.
       # Designed to be included in any server {} block.
       # Upstream to abstract backend connection(s) for php
       upstream php-backend {
-        server php-fpm:9000 max_conns=10;
+        server 127.0.0.1:9000 max_conns=10;
       }
       
       server {
         listen 8080;
         ## Your website name goes here.
-        server_name example.loc;
+        server_name wordpress.loc;
         ## Your only path reference.
         root /app;
         ## This should be in your http block and if it is, it's not needed here.
@@ -629,14 +640,37 @@ data:
         # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
         # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
         location ~ /\. {
-        	deny all;
+          deny all;
         }
       
         # Deny access to any files with a .php extension in the uploads directory
         # Works in sub-directory installs and also in multisite network
         # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
         location ~* /(?:uploads|files)/.*\.php$ {
-        	deny all;
+          deny all;
+        }
+        
+        # fpm monitor
+        location ~ /fpm-(status|ping) {
+          include fastcgi.conf;
+          fastcgi_pass php-backend;
+          access_log off;
+          allow 127.0.0.1;
+          allow 10.0.0.0/8;
+          allow 172.16.0.0/12;
+          allow 192.168.0.0/16;          
+          deny all;
+        }
+      
+        # nginx monitor
+        location ~ /nginx-status {
+          stub_status on;
+          access_log off;
+          allow 127.0.0.1;
+          allow 10.0.0.0/8;
+          allow 172.16.0.0/12;
+          allow 192.168.0.0/16;
+          deny all;
         }
       }
     }

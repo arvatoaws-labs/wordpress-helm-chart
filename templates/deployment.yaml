@@ -27,18 +27,18 @@ spec:
             - /run-nginx.sh
           ports:
             - name: http
-              containerPort: 80
+              containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /nginx-status
               port: http
           readinessProbe:
             httpGet:
               path: /
               port: http
           volumeMounts:
-          - mountPath: /etc/nginx/sites-available/default
+          - mountPath: /etc/nginx/nginx.conf
             name: config-volume
             subPath: nginx.conf
           resources:
@@ -94,6 +94,10 @@ spec:
             - name: fpm
               containerPort: 9000
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /fpm-ping
+              port: http
           volumeMounts:
           - mountPath: /etc/php/7.2/fpm/php-fpm.conf  
             name: config-volume
