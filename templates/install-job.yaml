@@ -1,0 +1,142 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "wordpress.fullname" . }}-install
+  labels:
+    app.kubernetes.io/name: {{ include "wordpress.name" . }}
+    helm.sh/chart: {{ include "wordpress.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  template:
+    spec:
+      ttlSecondsAfterFinished: 300
+      containers:
+      - name: job-done
+        image: busybox
+        command: ['sh', '-c', 'echo "all jobs completed"']      
+      initContainers:
+      - name: wordpress-install-core
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        workingDir: /app
+        command:
+        - /install-core.sh
+        env:
+        - name: MYSQL_HOST
+        {{- if .Values.mariadb.enabled }}
+          value: {{ template "mariadb.fullname" . }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.host | quote }}
+        {{- end }}
+        - name: MYSQL_PORT
+        {{- if .Values.mariadb.enabled }}
+          value: "3306"
+        {{- else }}
+          value: {{ .Values.externalDatabase.port | quote }}
+        {{- end }}
+        - name: MYSQL_DATABASE
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.db.name | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.database | quote }}
+        {{- end }}
+        - name: MYSQL_USER
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.db.user | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.user | quote }}
+        {{- end }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+            {{- if .Values.mariadb.enabled }}
+              name: {{ template "mariadb.fullname" . }}
+              key: mariadb-password
+            {{- else }}
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: db-password
+            {{- end }}
+        - name: WORDPRESS_FIRSTNAME
+          value: {{ .Values.wordpressFirstName | quote }}
+        - name: WORDPRESS_LASTNAME
+          value: {{ .Values.wordpressLastName | quote }}
+        - name: WORDPRESS_BLOGNAME
+          value: {{ .Values.wordpressBlogName | quote }}
+        - name: WORDPRESS_BLOGURL
+          value: {{ .Values.ingress.hosts | quote }}
+        - name: WORDPRESS_EMAIL
+          value: {{ .Values.wordpressEmail | quote }}
+        - name: WORDPRESS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "wordpress.fullname" . }}
+              key: wordpress-username
+        - name: WORDPRESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "wordpress.fullname" . }}
+              key: wordpress-password
+      - name: wordpress-activate-plugins
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        workingDir: /app
+        command:
+        - /activate-plugins.sh
+        env:
+        - name: MYSQL_HOST
+        {{- if .Values.mariadb.enabled }}
+          value: {{ template "mariadb.fullname" . }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.host | quote }}
+        {{- end }}
+        - name: MYSQL_PORT
+        {{- if .Values.mariadb.enabled }}
+          value: "3306"
+        {{- else }}
+          value: {{ .Values.externalDatabase.port | quote }}
+        {{- end }}
+        - name: MYSQL_DATABASE
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.db.name | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.database | quote }}
+        {{- end }}
+        - name: MYSQL_USER
+        {{- if .Values.mariadb.enabled }}
+          value: {{ .Values.mariadb.db.user | quote }}
+        {{- else }}
+          value: {{ .Values.externalDatabase.user | quote }}
+        {{- end }}
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+            {{- if .Values.mariadb.enabled }}
+              name: {{ template "mariadb.fullname" . }}
+              key: mariadb-password
+            {{- else }}
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: db-password
+            {{- end }}
+        - name: WORDPRESS_FIRSTNAME
+          value: {{ .Values.wordpressFirstName | quote }}
+        - name: WORDPRESS_LASTNAME
+          value: {{ .Values.wordpressLastName | quote }}
+        - name: WORDPRESS_BLOGNAME
+          value: {{ .Values.wordpressBlogName | quote }}
+        - name: WORDPRESS_BLOGURL
+          value: {{ .Values.ingress.hosts | quote }}
+        - name: WORDPRESS_EMAIL
+          value: {{ .Values.wordpressEmail | quote }}
+        - name: WORDPRESS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "wordpress.fullname" . }}
+              key: wordpress-username
+        - name: WORDPRESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "wordpress.fullname" . }}
+              key: wordpress-password
+      restartPolicy: Never
+  backoffLimit: 4
