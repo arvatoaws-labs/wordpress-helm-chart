@@ -28,3 +28,4 @@ Todos V2
 
 Todo V3
 * [ ] add hpa scaling based on php childs https://itnext.io/horizontal-pod-autoscale-with-custom-metrics-8cb13e9d475
+* [ ] implement cache based on redis https://www.cloudways.com/blog/install-redis-cache-wordpress/#Use-W3TC-to-Configure-Redis-Cache
