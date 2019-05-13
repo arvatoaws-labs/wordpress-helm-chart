@@ -134,5 +134,7 @@ spec:
           value: {{ .Values.offload.domain | quote }}
         - name: WP_OFFLOAD_CLOUDFRONT
           value: {{ .Values.offload.cloudfront | quote }}
+        - name: WP_PLUGINS
+          value: {{ join " " .Values.plugins }}
       restartPolicy: Never
   backoffLimit: 4
