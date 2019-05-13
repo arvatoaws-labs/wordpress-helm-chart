@@ -1,21 +1,21 @@
 # wordpress-helm-chart
 
 Bugs
-* [ ] WORDPRESS_BLOGURL should only contain the first entry from the ingress list
+* [x] WORDPRESS_BLOGURL should only contain the first entry from the ingress list
 * [ ] fix inspec tests
 
 Todos V1
-* [ ] use php config from values.yaml in configmap
-* [ ] implement exporter for php-fpm
-* [ ] add servicemonitor for php-fpm
-* [ ] implement exporter for nginx
-* [ ] add servicemonitor for nginx
-* [ ] add additional parameters for WP_OFFLOAD_BUCKET, WP_OFFLOAD_REGION, WP_OFFLOAD_DOMAIN, WP_OFFLOAD_CLOUDFRONT
-* [ ] add iam annotations
+* [x] use php config from values.yaml in configmap
+* [ ] implement exporter for php-fpm # sven + andreas
+* [ ] add servicemonitor for php-fpm # sven + andreas
+* [ ] implement exporter for nginx # sven + andreas
+* [ ] add servicemonitor for nginx # sven + andreas
+* [x] add additional parameters for WP_OFFLOAD_BUCKET, WP_OFFLOAD_REGION, WP_OFFLOAD_DOMAIN, WP_OFFLOAD_CLOUDFRONT
+* [x] add iam annotations
 * [ ] test rds db integration
 * [ ] test s3 integration using fileupload
 * [ ] test cloudfront integration
-* [ ] test custom image integration 
+* [x] test custom image integration 
 * [ ] write alarms for php and nginx limits
 
 Todos V2

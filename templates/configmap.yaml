@@ -113,22 +113,22 @@ data:
     ; forget to tweak pm.* to fit your needs.
     ; Note: Used when pm is set to 'static', 'dynamic' or 'ondemand'
     ; Note: This value is mandatory.
-    pm.max_children = 5
+    pm.max_children = {{ .Values.php.fpm.pm.max_children }}
 
     ; The number of child processes created on startup.
     ; Note: Used only when pm is set to 'dynamic'
     ; Default Value: min_spare_servers + (max_spare_servers - min_spare_servers) / 2
-    pm.start_servers = 2
+    pm.start_servers = {{ .Values.php.fpm.pm.start_servers }}
 
     ; The desired minimum number of idle server processes.
     ; Note: Used only when pm is set to 'dynamic'
     ; Note: Mandatory when pm is set to 'dynamic'
-    pm.min_spare_servers = 1
+    pm.min_spare_servers = {{ .Values.php.fpm.pm.min_spare_servers }}
 
     ; The desired maximum number of idle server processes.
     ; Note: Used only when pm is set to 'dynamic'
     ; Note: Mandatory when pm is set to 'dynamic'
-    pm.max_spare_servers = 3
+    pm.max_spare_servers = {{ .Values.php.fpm.pm.max_spare_servers }}
 
     ; The number of seconds after which an idle process will be killed.
     ; Note: Used only when pm is set to 'ondemand'
@@ -423,9 +423,6 @@ data:
     ;php_flag[display_errors] = off
     ;php_admin_value[error_log] = /var/log/fpm-php.www.log
     ;php_admin_flag[log_errors] = on
-    {{- range .Values.php.php_admin_value }}
-    - {{ . | title | quote }}
-    {{- end }}
     {{- range $key, $value := .Values.php.php_admin_value }}
     php_admin_value[{{ $key }}] = {{ $value }}
     {{- end }}

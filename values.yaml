@@ -50,12 +50,13 @@ affinity: {}
 
 php:
   fpm:
-    pm.max_children: 5
-    pm.start_servers: 2
-    pm.min_spare_servers: 1
-    pm.max_spare_servers: 3
-    pm.process_idle_timeout: 10s
-    pm.max_requests: 500
+    pm:
+      max_children: 5
+      start_servers: 2
+      min_spare_servers: 1
+      max_spare_servers: 3
+      process_idle_timeout: 10s
+      max_requests: 500
   php_admin_value:
     memory_limit: 64M
     upload_max_filesize: 10M
