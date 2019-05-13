@@ -57,6 +57,14 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "externaldb" }}
               key: db-password
             {{- end }}
+        - name: WP_OFFLOAD_BUCKET
+          value: {{ .Values.offload.bucket | quote }}
+        - name: WP_OFFLOAD_REGION
+          value: {{ .Values.offload.region | quote }}
+        - name: WP_OFFLOAD_DOMAIN
+          value: {{ .Values.offload.domain | quote }}
+        - name: WP_OFFLOAD_CLOUDFRONT
+          value: {{ .Values.offload.cloudfront | quote }}
         - name: WORDPRESS_FIRSTNAME
           value: {{ .Values.wordpressFirstName | quote }}
         - name: WORDPRESS_LASTNAME
@@ -64,7 +72,7 @@ spec:
         - name: WORDPRESS_BLOGNAME
           value: {{ .Values.wordpressBlogName | quote }}
         - name: WORDPRESS_BLOGURL
-          value: {{ .Values.ingress.hosts | quote }}
+          value: {{ index .Values.ingress.hosts 0 | quote }}
         - name: WORDPRESS_EMAIL
           value: {{ .Values.wordpressEmail | quote }}
         - name: WORDPRESS_USERNAME
@@ -118,25 +126,13 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "externaldb" }}
               key: db-password
             {{- end }}
-        - name: WORDPRESS_FIRSTNAME
-          value: {{ .Values.wordpressFirstName | quote }}
-        - name: WORDPRESS_LASTNAME
-          value: {{ .Values.wordpressLastName | quote }}
-        - name: WORDPRESS_BLOGNAME
-          value: {{ .Values.wordpressBlogName | quote }}
-        - name: WORDPRESS_BLOGURL
-          value: {{ .Values.ingress.hosts | quote }}
-        - name: WORDPRESS_EMAIL
-          value: {{ .Values.wordpressEmail | quote }}
-        - name: WORDPRESS_USERNAME
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "wordpress.fullname" . }}
-              key: wordpress-username
-        - name: WORDPRESS_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: {{ template "wordpress.fullname" . }}
-              key: wordpress-password
+        - name: WP_OFFLOAD_BUCKET
+          value: {{ .Values.offload.bucket | quote }}
+        - name: WP_OFFLOAD_REGION
+          value: {{ .Values.offload.region | quote }}
+        - name: WP_OFFLOAD_DOMAIN
+          value: {{ .Values.offload.domain | quote }}
+        - name: WP_OFFLOAD_CLOUDFRONT
+          value: {{ .Values.offload.cloudfront | quote }}
       restartPolicy: Never
   backoffLimit: 4

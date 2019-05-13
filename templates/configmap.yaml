@@ -423,10 +423,12 @@ data:
     ;php_flag[display_errors] = off
     ;php_admin_value[error_log] = /var/log/fpm-php.www.log
     ;php_admin_flag[log_errors] = on
-    php_admin_value[memory_limit] = 64M
-    php_admin_value[upload_max_filesize] = 10M
-    php_admin_value[post_max_size] = 15M
-    php_admin_value[date.timezone] = Europe/Berlin
+    {{- range .Values.php.php_admin_value }}
+    - {{ . | title | quote }}
+    {{- end }}
+    {{- range $key, $value := .Values.php.php_admin_value }}
+    php_admin_value[{{ $key }}] = {{ $value }}
+    {{- end }}
   fpm.conf: |-
     ;;;;;;;;;;;;;;;;;;;;;
     ; FPM Configuration ;
@@ -595,7 +597,7 @@ data:
       server {
         listen 8080;
         ## Your website name goes here.
-        server_name wordpress.loc;
+        server_name {{ join " " .Values.ingress.hosts }};
         ## Your only path reference.
         root /app;
         ## This should be in your http block and if it is, it's not needed here.

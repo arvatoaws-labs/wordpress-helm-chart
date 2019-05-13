@@ -62,6 +62,12 @@ php:
     post_max_size: 15M
     date.timezone: Europe/Berlin
 
+offload:
+  bucket: null
+  region: null
+  domain: null
+  cloudfront: null
+
 ##
 ## MariaDB chart configuration
 ##

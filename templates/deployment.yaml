@@ -83,13 +83,14 @@ spec:
                 name: {{ printf "%s-%s" .Release.Name "externaldb" }}
                 key: db-password
               {{- end }}
-          - name: WORDPRESS_USERNAME
-            value: {{ .Values.wordpressUsername | quote }}
-          - name: WORDPRESS_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: {{ template "wordpress.fullname" . }}
-                key: wordpress-password          
+          - name: WP_OFFLOAD_BUCKET
+            value: {{ .Values.offload.bucket | quote }}
+          - name: WP_OFFLOAD_REGION
+            value: {{ .Values.offload.region | quote }}
+          - name: WP_OFFLOAD_DOMAIN
+            value: {{ .Values.offload.domain | quote }}
+          - name: WP_OFFLOAD_CLOUDFRONT
+            value: {{ .Values.offload.cloudfront | quote }}
           ports:
             - name: fpm
               containerPort: 9000
