@@ -63,6 +63,18 @@ php:
     post_max_size: 15M
     date.timezone: Europe/Berlin
 
+exporter:
+  phpfpm:
+    image:
+      repository: hipages/php-fpm_exporter
+      tag: latest
+      pullPolicy: Always
+    listenaddress: :9253
+    metrics: /metrics
+    scrape_uri: tcp://127.0.0.1:9000/status
+    fix_process_count: false
+    log_level: info
+
 offload:
   bucket: null
   region: null

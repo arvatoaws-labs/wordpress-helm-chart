@@ -46,10 +46,10 @@ spec:
             httpGet:
               path: /nginx-status
               port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
+          #readinessProbe:
+          #  httpGet:
+          #    path: /
+          #    port: http
           volumeMounts:
           - mountPath: /etc/nginx/nginx.conf
             name: config-volume
@@ -119,6 +119,30 @@ spec:
           - mountPath: /etc/php/7.2/fpm/pool.d/www.conf
             name: config-volume
             subPath: fpm-pool.conf            
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+        - name: {{ .Chart.Name }}-php-fpm-monitor
+          image: "{{ .Values.exporter.phpfpm.image.repository }}:{{ .Values.exporter.phpfpm.image.tag }}"
+          imagePullPolicy: {{ .Values.exporter.phpfpm.image.pullPolicy }}    
+          env:
+          - name: PHP_FPM_WEB_LISTEN_ADDRESS
+            value: {{ .Values.exporter.phpfpm.listenaddress | quote }}
+          - name: PHP_FPM_WEB_TELEMETRY_PATH
+            value: {{ .Values.exporter.phpfpm.metrics | quote }}
+          - name: PHP_FPM_SCRAPE_URI
+            value: {{ .Values.exporter.phpfpm.scrape_uri | quote }}
+          - name: PHP_FPM_FIX_PROCESS_COUNT 
+            value: {{ .Values.exporter.phpfpm.fix_process_count | quote }}
+          - name: PHP_FPM_LOG_LEVEL
+            value: {{ .Values.exporter.phpfpm.log_level | quote }}
+          ports:
+            - name: listenaddress
+              containerPort: 9253
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /status
+              port: http
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
