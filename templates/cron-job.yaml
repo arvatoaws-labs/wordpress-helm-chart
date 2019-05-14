@@ -63,4 +63,20 @@ spec:
               value: {{ .Values.offload.domain | quote }}
             - name: WP_OFFLOAD_CLOUDFRONT
               value: {{ .Values.offload.cloudfront | quote }}
+          volumeMounts:
+          - mountPath: /etc/php/7.2/fpm/php-fpm.conf
+            name: config-volume
+            subPath: fpm.conf
+          - mountPath: /etc/php/7.2/fpm/pool.d/www.conf
+            name: config-volume
+            subPath: fpm-pool.conf
+          - mountPath: /app/wp-config.php
+            name: config-volume
+            subPath: wp-config.php
           restartPolicy: OnFailure
+        volumes:
+        - name: config-volume
+          configMap:
+            # Provide the name of the ConfigMap containing the files you want
+            # to add to the container
+            name: {{ include "wordpress.fullname" . }}
