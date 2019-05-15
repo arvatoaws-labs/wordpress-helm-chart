@@ -13,8 +13,8 @@ Todos V1
 * [x] add additional parameters for WP_OFFLOAD_BUCKET, WP_OFFLOAD_REGION, WP_OFFLOAD_DOMAIN, WP_OFFLOAD_CLOUDFRONT
 * [x] add iam annotations
 * [ ] test rds db integration
-* [ ] test s3 integration using fileupload
-* [ ] test cloudfront integration
+* [X] test s3 integration using fileupload
+* [X] test cloudfront integration
 * [x] test custom image integration 
 * [ ] write alarms for php and nginx limits
 
