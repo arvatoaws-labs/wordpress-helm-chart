@@ -17,7 +17,7 @@ Todos V1
 * [X] test cloudfront integration
 * [x] test custom image integration 
 * [ ] write alarms for php and nginx limits
-* [ ] fix plugin activation mechanism
+* [X] fix plugin activation mechanism
 
 Todos V2
 * [ ] add nginx rate limit for dynamic calls
