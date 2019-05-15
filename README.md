@@ -21,6 +21,7 @@ Todos V1
 
 Todos V2
 * [ ] add nginx rate limit for dynamic calls
+  - Or do this is the traefik ingress?
 * [ ] add security headers
 * [ ] add ip auth for wp-admin?
 * [ ] add internal php upstream for status
