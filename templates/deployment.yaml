@@ -146,10 +146,10 @@ spec:
             - name: listenaddress
               containerPort: 9253
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /metrics
-#              port: listenaddress
+          livenessProbe:
+            httpGet:
+              path: /
+              port: listenaddress
           resources:
 {{ toYaml .Values.resources | indent 12 }}
 #        - name: {{ .Chart.Name }}-nginx-monitor
