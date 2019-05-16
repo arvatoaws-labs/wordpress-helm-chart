@@ -69,7 +69,7 @@ exporter:
       repository: nginx/nginx-prometheus-exporter
       tag: 0.3.0
       pullPolicy: Always
-    stub_status: 8080
+    stub_status: /stub_status
     scrape_port: 9113
     metrics: /metrics
 
