@@ -23,11 +23,12 @@ Todos V2
 * [ ] add nginx rate limit for dynamic calls
   - Or do this is the traefik ingress?
 * [ ] add security headers
+  - Treafik: ingress.kubernetes.io/content-security-policy: VALUE, ingress.kubernetes.io/browser-xss-filter: "true", ingress.kubernetes.io/content-type-nosniff: "true", ingress.kubernetes.io/custom-frame-options-value: VALUE, ingress.kubernetes.io/force-hsts: "false", etc. (https://docs.traefik.io/configuration/backends/kubernetes/#security-headers-annotations)
 * [ ] add ip auth for wp-admin?
+  - Traefik: traefik.ingress.kubernetes.io/whitelist-source-range: "1.2.3.0/24, fe80::/16"
 * [ ] add internal php upstream for status
 * [ ] add pod disruption budget
 * [ ] create grafana dashboard
-* [ ] TBD
 
 Todo V3
 * [ ] add hpa scaling based on php childs https://itnext.io/horizontal-pod-autoscale-with-custom-metrics-8cb13e9d475
