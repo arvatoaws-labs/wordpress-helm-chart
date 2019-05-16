@@ -146,32 +146,32 @@ spec:
             - name: listenaddress
               containerPort: 9253
               protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: listenaddress
+#          livenessProbe:
+#            httpGet:
+#              path: /metrics
+#              port: listenaddress
           resources:
 {{ toYaml .Values.resources | indent 12 }}
-        - name: {{ .Chart.Name }}-nginx-monitor
-          image: "{{ .Values.exporter.nginx.image.repository }}:{{ .Values.exporter.nginx.image.tag }}"
-          imagePullPolicy: {{ .Values.exporter.nginx.image.pullPolicy }}
-          env:
-          - name: nginx_stub_status
-            value: {{ .Values.exporter.nginx.stub_status | quote }}
-          - name: nginx_scrape_port_uri
-            value: {{ .Values.exporter.nginx.scrape_port | quote }}
-          - name: nginx_metrics
-            value: {{ .Values.exporter.nginx.metrics | quote }}
-          ports:
-            - name: listenaddress
-              containerPort: 9253
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /metrics
-              port: listenaddress
-          resources:
-{{ toYaml .Values.resources | indent 12 }}
+#        - name: {{ .Chart.Name }}-nginx-monitor
+#          image: "{{ .Values.exporter.nginx.image.repository }}:{{ .Values.exporter.nginx.image.tag }}"
+#          imagePullPolicy: {{ .Values.exporter.nginx.image.pullPolicy }}
+#          env:
+#          - name: nginx_stub_status
+#            value: {{ .Values.exporter.nginx.stub_status | quote }}
+#          - name: nginx_scrape_port_uri
+#            value: {{ .Values.exporter.nginx.scrape_port | quote }}
+#          - name: nginx_metrics
+#            value: {{ .Values.exporter.nginx.metrics | quote }}
+#          ports:
+#            - name: listenaddress
+#              containerPort: 9253
+#              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /metrics
+#              port: listenaddress
+#          resources:
+#{{ toYaml .Values.resources | indent 12 }}
       volumes:
       - name: config-volume
         configMap:
