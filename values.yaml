@@ -82,7 +82,7 @@ exporter:
     metrics: /metrics
     scrape_uri: /status
     fix_process_count: false
-    log_level: info
+    log_level: debug
 
 offload:
   bucket: null
