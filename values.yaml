@@ -80,7 +80,7 @@ exporter:
       pullPolicy: Always
     listenaddress: :9253
     metrics: /metrics
-    scrape_uri: tcp://127.0.0.1:9000/status
+    scrape_uri: /status
     fix_process_count: false
     log_level: info
 
