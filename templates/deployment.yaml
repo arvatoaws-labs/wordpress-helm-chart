@@ -153,7 +153,7 @@ spec:
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-nginx-monitor
-          image: "{{ .Values.exporter.nginx.image.repository }}:{{ .Values.exporter.phpfpm.image.tag }}"
+          image: "{{ .Values.exporter.nginx.image.repository }}:{{ .Values.exporter.nginx.image.tag }}"
           imagePullPolicy: {{ .Values.exporter.nginx.image.pullPolicy }}
           env:
           - name: nginx_stub_status
