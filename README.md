@@ -12,14 +12,16 @@ Todos V1
 * [ ] add servicemonitor for nginx # sven + andreas
 * [x] add additional parameters for WP_OFFLOAD_BUCKET, WP_OFFLOAD_REGION, WP_OFFLOAD_DOMAIN, WP_OFFLOAD_CLOUDFRONT
 * [x] add iam annotations
-* [ ] test rds db integration
+* [X] test rds db integration
 * [X] test s3 integration using fileupload
 * [X] test cloudfront integration
 * [x] test custom image integration 
 * [ ] write alarms for php and nginx limits
+* [X] fix plugin activation mechanism
 
 Todos V2
 * [ ] add nginx rate limit for dynamic calls
+  - Or do this is the traefik ingress?
 * [ ] add security headers
 * [ ] add ip auth for wp-admin?
 * [ ] add internal php upstream for status
