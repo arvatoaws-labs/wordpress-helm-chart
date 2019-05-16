@@ -148,8 +148,8 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /status
-              port: http
+              path: /metrics
+              port: listenaddress
           resources:
 {{ toYaml .Values.resources | indent 12 }}
         - name: {{ .Chart.Name }}-nginx-monitor
@@ -168,8 +168,8 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /status
-              port: http
+              path: /metrtics
+              port: listenaddress
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
