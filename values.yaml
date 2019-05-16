@@ -64,6 +64,15 @@ php:
     date.timezone: Europe/Berlin
 
 exporter:
+  nginx:
+    image:
+      repository: nginx/nginx-prometheus-exporter
+      tag: latest
+      pullPolicy: Always
+    stub_status: 8080
+    scrape_port: 9113
+    metrics: /metrics
+
   phpfpm:
     image:
       repository: hipages/php-fpm_exporter
