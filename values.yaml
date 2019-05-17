@@ -69,10 +69,14 @@ exporter:
       repository: nginx/nginx-prometheus-exporter
       tag: 0.3.0
       pullPolicy: Always
-    stub_status: /stub_status
-    scrape_port: 9113
-    metrics: /metrics
-    ssl: false
+    listen_address: :9113
+    telemetry_path: /metrics
+    nginx_plus: false
+    scrape_uri: "http://wordpress:8080/stub_status"
+    ssl_verify: false
+    timeout: "60"
+    nginx_retries: "0"
+    nginx_retry_interval: "3"
 
   phpfpm:
     image:
