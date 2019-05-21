@@ -85,7 +85,7 @@ exporter:
       pullPolicy: Always
     listenaddress: :9253
     metrics: /metrics
-    scrape_uri: /fpm-status
+    scrape_uri: "tcp://127.0.0.1:9000/fpm-status"
     fix_process_count: false
     log_level: debug
 
