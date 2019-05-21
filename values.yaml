@@ -72,7 +72,7 @@ exporter:
     listen_address: :9113
     telemetry_path: /metrics
     nginx_plus: false
-    scrape_uri: "http://wordpress:8080/stub_status"
+    scrape_uri: "http://127.0.0.1:8080/nginx-status"
     ssl_verify: false
     timeout: "60"
     nginx_retries: "0"
@@ -85,7 +85,7 @@ exporter:
       pullPolicy: Always
     listenaddress: :9253
     metrics: /metrics
-    scrape_uri: /status
+    scrape_uri: /fpm-status
     fix_process_count: false
     log_level: debug
 
