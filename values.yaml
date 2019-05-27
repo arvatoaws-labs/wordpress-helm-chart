@@ -80,9 +80,11 @@ offload:
   region: null
   domain: null
   cloudfront: null
+  local_domains: null
 
 plugins:
   - amazon-s3-and-cloudfront
+  - amazon-s3-and-cloudfront-tweaks
 
 ##
 ## MariaDB chart configuration

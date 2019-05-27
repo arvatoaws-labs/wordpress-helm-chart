@@ -108,6 +108,8 @@ spec:
             value: {{ .Values.offload.domain | quote }}
           - name: WP_OFFLOAD_CLOUDFRONT
             value: {{ .Values.offload.cloudfront | quote }}
+          - name: WP_OFFLOAD_LOCAL_DOMAINS
+            value: {{ .Values.offload.local_domains | quote }}
           ports:
             - name: fpm
               containerPort: 9000
