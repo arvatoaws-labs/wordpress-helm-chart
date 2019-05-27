@@ -64,16 +64,30 @@ php:
     date.timezone: Europe/Berlin
 
 exporter:
+  nginx:
+    image:
+      repository: nginx/nginx-prometheus-exporter
+      tag: 0.3.0
+      pullPolicy: Always
+    listen_address: :9113
+    telemetry_path: /metrics
+    nginx_plus: false
+    scrape_uri: "http://127.0.0.1:8080/nginx-status"
+    ssl_verify: false
+    timeout: "60"
+    nginx_retries: "0"
+    nginx_retry_interval: "3"
+
   phpfpm:
     image:
       repository: hipages/php-fpm_exporter
-      tag: latest
+      tag: 1.0.0
       pullPolicy: Always
     listenaddress: :9253
     metrics: /metrics
-    scrape_uri: tcp://127.0.0.1:9000/status
+    scrape_uri: "tcp://127.0.0.1:9000/fpm-status"
     fix_process_count: false
-    log_level: info
+    log_level: debug
 
 offload:
   bucket: null
