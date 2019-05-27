@@ -8,9 +8,9 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
+  ttlSecondsAfterFinished: 60
   template:
     spec:
-      ttlSecondsAfterFinished: 300
       containers:
       - name: job-done
         image: busybox
