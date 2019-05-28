@@ -11,6 +11,7 @@ metadata:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
     "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   ttlSecondsAfterFinished: 60
   template:
@@ -69,6 +70,8 @@ spec:
           value: {{ .Values.offload.domain | quote }}
         - name: WP_OFFLOAD_CLOUDFRONT
           value: {{ .Values.offload.cloudfront | quote }}
+        - name: WP_DEFAULT_HOST
+          value: {{ index .Values.ingress.hosts 0 | quote }}
         - name: WORDPRESS_FIRSTNAME
           value: {{ .Values.wordpressFirstName | quote }}
         - name: WORDPRESS_LASTNAME
@@ -150,6 +153,8 @@ spec:
           value: {{ .Values.offload.cloudfront | quote }}
         - name: WP_OFFLOAD_LOCAL_DOMAINS
           value: {{ .Values.offload.local_domains | quote }}
+        - name: WP_DEFAULT_HOST
+          value: {{ index .Values.ingress.hosts 0 | quote }}
         - name: WP_PLUGINS
           value: {{ include "wordpress.joinListWithSpace" .Values.plugins }}
         volumeMounts:
