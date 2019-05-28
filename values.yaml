@@ -48,7 +48,11 @@ tolerations: []
 
 affinity: {}
 
+nginx:
+  resources: {}
+
 php:
+  resources: {}
   fpm:
     pm:
       max_children: 5
@@ -77,6 +81,7 @@ exporter:
     timeout: "60"
     nginx_retries: "0"
     nginx_retry_interval: "3"
+    resources: {}
 
   phpfpm:
     image:
@@ -88,6 +93,7 @@ exporter:
     scrape_uri: "tcp://127.0.0.1:9000/fpm-status"
     fix_process_count: false
     log_level: debug
+    resources: {}
 
 offload:
   bucket: null

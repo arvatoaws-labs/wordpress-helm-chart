@@ -59,7 +59,7 @@ spec:
             name: config-volume
             subPath: wp-config.php
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.nginx.resources | indent 12 }}
         - name: {{ .Chart.Name }}-php-fpm
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -131,7 +131,7 @@ spec:
             name: config-volume
             subPath: wp-config.php
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.php.resources | indent 12 }}
         - name: {{ .Chart.Name }}-php-fpm-monitor
           image: "{{ .Values.exporter.phpfpm.image.repository }}:{{ .Values.exporter.phpfpm.image.tag }}"
           imagePullPolicy: {{ .Values.exporter.phpfpm.image.pullPolicy }}    
@@ -155,7 +155,7 @@ spec:
               path: /
               port: listenaddress
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.exporter.phpfpm.resources | indent 12 }}
         - name: {{ .Chart.Name }}-nginx-monitor
           image: "{{ .Values.exporter.nginx.image.repository }}:{{ .Values.exporter.nginx.image.tag }}"
           imagePullPolicy: {{ .Values.exporter.nginx.image.pullPolicy }}
@@ -185,7 +185,7 @@ spec:
 #              path: /metrics
 #              port: listenaddress
           resources:
-{{ toYaml .Values.resources | indent 12 }}
+{{ toYaml .Values.exporter.nginx.resources | indent 12 }}
       volumes:
       - name: config-volume
         configMap:
