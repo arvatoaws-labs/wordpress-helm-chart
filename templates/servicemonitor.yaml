@@ -30,5 +30,4 @@ spec:
     matchLabels:
       app.kubernetes.io/name: {{ include "wordpress.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
-      app.kubernetes.io/component: http
 {{- end }}
