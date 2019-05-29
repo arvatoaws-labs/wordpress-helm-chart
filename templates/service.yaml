@@ -21,7 +21,7 @@ spec:
     - port: {{ .Values.exporter.phpfpm.port }}
       targetPort: php-fpm-metrics
       protocol: TCP
-      name: php-fpm-metrics      
+      name: php-fpm-metrics
   selector:
     app.kubernetes.io/name: {{ include "wordpress.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
