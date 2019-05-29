@@ -1,0 +1,34 @@
+{{- if and ( .Values.monitoring.serviceMonitor.enabled ) ( .Values.monitoring.enabled ) }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+{{- if .Values.monitoring.serviceMonitor.labels }}
+  labels:
+{{ toYaml .Values.monitoring.serviceMonitor.labels | indent 4}}
+{{- end }}
+  name: {{ template "wordpress.fullname" . }}-prometheus-exporter
+{{- if .Values.monitoring.serviceMonitor.namespace }}
+  namespace: {{ .Values.monitoring.serviceMonitor.namespace }}
+{{- end }}
+spec:
+  endpoints:
+  - targetPort: nginx-metrics
+    path: /metrics
+{{- if .Values.monitoring.serviceMonitor.interval }}
+    interval: {{ .Values.monitoring.serviceMonitor.interval }}
+{{- end }}
+  - targetPort: php-fpm-metrics
+    path: /metrics
+{{- if .Values.monitoring.serviceMonitor.interval }}
+    interval: {{ .Values.monitoring.serviceMonitor.interval }}
+{{- end }}
+  jobLabel: {{ template "wordpress.fullname" . }}-prometheus-exporter
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "wordpress.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/component: http
+{{- end }}

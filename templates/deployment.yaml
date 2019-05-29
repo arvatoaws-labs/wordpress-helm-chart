@@ -47,10 +47,10 @@ spec:
             httpGet:
               path: /nginx-status
               port: http
-          #readinessProbe:
-          #  httpGet:
-          #    path: /
-          #    port: http
+          readinessProbe:
+            httpGet:
+              path: /wp-login.php
+              port: http
           volumeMounts:
           - mountPath: /etc/nginx/nginx.conf
             name: config-volume
@@ -137,7 +137,7 @@ spec:
           imagePullPolicy: {{ .Values.exporter.phpfpm.image.pullPolicy }}    
           env:
           - name: PHP_FPM_WEB_LISTEN_ADDRESS
-            value: {{ .Values.exporter.phpfpm.listenaddress | quote }}
+            value: ":{{ .Values.exporter.phpfpm.port }}"
           - name: PHP_FPM_WEB_TELEMETRY_PATH
             value: {{ .Values.exporter.phpfpm.metrics | quote }}
           - name: PHP_FPM_SCRAPE_URI
@@ -147,13 +147,13 @@ spec:
           - name: PHP_FPM_LOG_LEVEL
             value: {{ .Values.exporter.phpfpm.log_level | quote }}
           ports:
-            - name: listenaddress
-              containerPort: 9253
+            - name: php-fpm-metrics
+              containerPort: {{ .Values.exporter.phpfpm.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /
-              port: listenaddress
+              port: php-fpm-metrics
           resources:
 {{ toYaml .Values.exporter.phpfpm.resources | indent 12 }}
         - name: {{ .Chart.Name }}-nginx-monitor
@@ -161,7 +161,7 @@ spec:
           imagePullPolicy: {{ .Values.exporter.nginx.image.pullPolicy }}
           env:
           - name: LISTEN_ADDRESS
-            value: {{ .Values.exporter.nginx.listen_address | quote }}
+            value: ":{{ .Values.exporter.nginx.port }}"
           - name: TELEMETRY_PATH
             value: {{ .Values.exporter.nginx.telemetry_path | quote }}
           - name: NGINX_PLUS
@@ -177,13 +177,13 @@ spec:
           - name: NGINX_RETRY_INTERVAL
             value: {{ .Values.exporter.nginx.nginx_retry_interval | quote }}
           ports:
-            - name: listenaddress
-              containerPort: 9113
+            - name: nginx-metrics
+              containerPort: {{ .Values.exporter.nginx.port }}
               protocol: TCP
-#          livenessProbe:
-#            httpGet:
-#              path: /metrics
-#              port: listenaddress
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: nginx-metrics
           resources:
 {{ toYaml .Values.exporter.nginx.resources | indent 12 }}
       volumes:
