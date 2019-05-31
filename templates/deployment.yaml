@@ -132,6 +132,7 @@ spec:
             subPath: wp-config.php
           resources:
 {{ toYaml .Values.php.resources | indent 12 }}
+{{- if ( .Values.monitoring.enabled ) }}
         - name: {{ .Chart.Name }}-php-fpm-monitor
           image: "{{ .Values.exporter.phpfpm.image.repository }}:{{ .Values.exporter.phpfpm.image.tag }}"
           imagePullPolicy: {{ .Values.exporter.phpfpm.image.pullPolicy }}    
@@ -186,6 +187,7 @@ spec:
               port: nginx-metrics
           resources:
 {{ toYaml .Values.exporter.nginx.resources | indent 12 }}
+{{ end }}
       volumes:
       - name: config-volume
         configMap:

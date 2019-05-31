@@ -21,6 +21,7 @@ spec:
         image: busybox
         command: ['sh', '-c', 'echo "all jobs completed"']      
       initContainers:
+{{- if ( .Values.offload.bucket ) }}
       - name: wordpress-migrate-amazon-s3
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -82,6 +83,7 @@ spec:
           - mountPath: /app/wp-config.php
             name: config-volume
             subPath: wp-config.php
+{{ end }}
       restartPolicy: Never
       volumes:
       - name: config-volume
