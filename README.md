@@ -6,10 +6,10 @@ Bugs
 
 Todos V1
 * [x] use php config from values.yaml in configmap
-* [ ] implement exporter for php-fpm # sven + andreas
-* [ ] add servicemonitor for php-fpm # sven + andreas
-* [ ] implement exporter for nginx # sven + andreas
-* [ ] add servicemonitor for nginx # sven + andreas
+* [x] implement exporter for php-fpm # sven + andreas
+* [x] add servicemonitor for php-fpm # sven + andreas
+* [x] implement exporter for nginx # sven + andreas
+* [x] add servicemonitor for nginx # sven + andreas
 * [x] add additional parameters for WP_OFFLOAD_BUCKET, WP_OFFLOAD_REGION, WP_OFFLOAD_DOMAIN, WP_OFFLOAD_CLOUDFRONT
 * [x] add iam annotations
 * [X] test rds db integration
