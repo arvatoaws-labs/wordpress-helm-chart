@@ -51,6 +51,7 @@ spec:
             httpGet:
               path: /wp-login.php
               port: http
+              timeoutSeconds: 5
           volumeMounts:
           - mountPath: /etc/nginx/nginx.conf
             name: config-volume
