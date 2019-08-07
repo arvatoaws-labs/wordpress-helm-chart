@@ -177,6 +177,9 @@ externalDatabase:
 
   ## Database port number
   port: 3306
+
+  root_username: null
+  root_password: null
   
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables

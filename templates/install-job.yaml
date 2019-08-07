@@ -62,6 +62,17 @@ spec:
               name: {{ printf "%s-%s" .Release.Name "externaldb" }}
               key: db-password
             {{- end }}
+        {{- if .Values.externalDatabase.root_user }}
+        - name: MYSQL_ROOT_USER
+          value: {{ .Values.externalDatabase.root_user | quote }}
+        {{- end }}
+        {{- if .Values.externalDatabase.root_password }}
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ printf "%s-%s" .Release.Name "externaldb" }}
+              key: db-root-password
+        {{- end }}
         - name: WP_OFFLOAD_BUCKET
           value: {{ .Values.offload.bucket | quote }}
         - name: WP_OFFLOAD_REGION
