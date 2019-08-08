@@ -1,4 +1,17 @@
 apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "wordpress.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "wordpress.name" . }}
+    helm.sh/chart: {{ include "wordpress.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # job is considered part of the release.
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation    
 data:
   fpm-pool.conf: |-
     ; Start a new pool named 'www'.
@@ -835,11 +848,3 @@ data:
 
     /** Sets up WordPress vars and included files. */
     require_once(ABSPATH . 'wp-settings.php');
-kind: ConfigMap
-metadata:
-  name: {{ include "wordpress.fullname" . }}
-  labels:
-    app.kubernetes.io/name: {{ include "wordpress.name" . }}
-    helm.sh/chart: {{ include "wordpress.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
