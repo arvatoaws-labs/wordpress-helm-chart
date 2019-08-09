@@ -116,50 +116,25 @@ plugins:
   - amazon-s3-and-cloudfront
   - amazon-s3-and-cloudfront-tweaks
 
-##
-## MariaDB chart configuration
-##
-## https://github.com/helm/charts/blob/master/stable/mariadb/values.yaml
-##
-mariadb:
-  ## Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database set this to false and configure the externalDatabase parameters
-  enabled: true
-  ## Disable MariaDB replication
-  replication:
-    enabled: false
-
-  ## Create a database and a database user
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#creating-a-database-user-on-first-run
-  ##
-  db:
-    name: bitnami_wordpress
-    user: bn_wordpress
-    ## If the password is not specified, mariadb will generates a random password
-    ##
-    # password:
-
-  ## MariaDB admin password
-  ## ref: https://github.com/bitnami/bitnami-docker-mariadb/blob/master/README.md#setting-the-root-password-on-first-run
-  ##
-  # rootUser:
-  #   password:
-
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  master:
-    persistence:
-      enabled: false
-      ## mariadb data Persistent Volume Storage Class
-      ## If defined, storageClassName: <storageClass>
-      ## If set to "-", storageClassName: "", which disables dynamic provisioning
-      ## If undefined (the default) or set to null, no storageClassName spec is
-      ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-      ##   GKE, AWS & OpenStack)
-      ##
-      # storageClass: "-"
-      accessMode: ReadWriteOnce
-      size: 8Gi
+hooks:
+  pre-install:
+    - wait-for-mysql-root
+    - create-mysql-database
+    - create-mysql-user
+    - wait-for-mysql-user
+    - verify-wp-core-checksums
+    - install-wp-core
+    - update-wp-core-database
+    - update-wp-admin-user
+    - activate-wp-plugins
+  post-install:
+  pre-upgrade:
+    - wait-for-mysql-user
+    - verify-wp-core-checksums
+    - update-wp-admin-user
+  post-upgrade:
+    - wait-for-mysql-user
+    - update-wp-core-database
 
 externalDatabase:
 ## All of these values are only used when mariadb.enabled is set to false
@@ -178,7 +153,7 @@ externalDatabase:
   ## Database port number
   port: 3306
 
-  root_username: null
+  root_user: null
   root_password: null
   
 ## User of the application
