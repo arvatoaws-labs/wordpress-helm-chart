@@ -135,6 +135,7 @@ hooks:
   post-upgrade:
     - wait-for-mysql-user
     - update-wp-core-database
+    - migrate-amazon-s3
 
 externalDatabase:
 ## All of these values are only used when mariadb.enabled is set to false
@@ -155,7 +156,7 @@ externalDatabase:
 
   root_user: null
   root_password: null
-  
+
 ## User of the application
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#environment-variables
 ##
