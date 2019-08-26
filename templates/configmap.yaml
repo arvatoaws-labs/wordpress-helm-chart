@@ -12,7 +12,7 @@ metadata:
     # job is considered part of the release.
     "helm.sh/hook-weight": "0"
     "helm.sh/hook": pre-install,pre-upgrade
-    "helm.sh/hook-delete-policy": before-hook-creation    
+    "helm.sh/hook-delete-policy": before-hook-creation
 data:
   fpm-pool.conf: |-
     ; Start a new pool named 'www'.
@@ -569,42 +569,42 @@ data:
   nginx.conf: |-
     daemon off;
     worker_processes 1;
-    
+
     error_log /dev/stderr warn;
     pid /tmp/nginx.pid;
-    
+
     events {
       use epoll;
       worker_connections 128;
     }
-    
+
     http {
       include /etc/nginx/mime.types;
       default_type application/octet-stream;
-    
+
       log_format main '$remote_addr - $remote_user [$time_local] "$request" '
                           '$status $body_bytes_sent "$http_referer" '
                           '"$http_user_agent" "$http_x_forwarded_for"';
-    
+
       access_log /dev/stdout main;
       error_log /dev/stderr;
-    
+
       sendfile on;
       #tcp_nopush     on;
-    
+
       keepalive_timeout 65;
-    
+
       gzip on;
-    
+
       include /etc/nginx/conf.d/*.conf;
-    
+
       # WordPress single site rules.
       # Designed to be included in any server {} block.
       # Upstream to abstract backend connection(s) for php
       upstream php-backend {
         server 127.0.0.1:9000 max_conns=10;
       }
-      
+
       server {
         listen 8080;
         ## Your website name goes here.
@@ -613,9 +613,9 @@ data:
         root /app;
         ## This should be in your http block and if it is, it's not needed here.
         index index.php;
-      
+
         client_max_body_size 10M;
-      
+
         # default files forbidden due to version info
         location ^~ /readme.html {
           return 403;
@@ -623,19 +623,19 @@ data:
         location ^~ /license.html {
           return 403;
         }
-      
+
         # private files
         location ^~ /wp-config {
           return 403;
         }
-      
+
         location / {
           # This is cool because no php is touched for static content.
           # include the "?$args" part so non-default permalinks doesn't break when using query string
           # try_files $uri $uri/ /index.php?$args;
           try_files $uri $uri/ /index.php?$args ;
         }
-      
+
         location ~ \.php$ {
           #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
           include fastcgi.conf;
@@ -644,25 +644,25 @@ data:
           fastcgi_buffers 16 16k;
           fastcgi_buffer_size 32k;
         }
-      
+
         location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
           expires max;
           log_not_found off;
         }
-      
+
         # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
         # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
         location ~ /\. {
           deny all;
         }
-      
+
         # Deny access to any files with a .php extension in the uploads directory
         # Works in sub-directory installs and also in multisite network
         # Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
         location ~* /(?:uploads|files)/.*\.php$ {
           deny all;
         }
-        
+
         # fpm monitor
         location ~ /fpm-(status|ping) {
           include fastcgi.conf;
@@ -671,10 +671,10 @@ data:
           allow 127.0.0.1;
           allow 10.0.0.0/8;
           allow 172.16.0.0/12;
-          allow 192.168.0.0/16;          
+          allow 192.168.0.0/16;
           deny all;
         }
-      
+
         # nginx monitor
         location ~ /nginx-status {
           stub_status on;
@@ -737,6 +737,14 @@ data:
      * Only run cronjobs as real cronjobs in the backend
      */
     define('DISABLE_WP_CRON', 'true');
+
+    /*
+    * Force HTTP Host
+    */
+    if(getenv('WP_FORCE_HOST')) {
+        $_SERVER['HTTP_HOST'] = getenv('WP_FORCE_HOST');
+        $_SERVER['SERVER_NAME']  = getenv('WP_FORCE_HOST');
+    }
 
     /*
      * Support for wp cli

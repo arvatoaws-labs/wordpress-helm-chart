@@ -49,6 +49,8 @@ spec:
               value: {{ .Values.offload.local_domains | quote }}
             - name: WP_DEFAULT_HOST
               value: {{ index .Values.ingress.hosts 0 | quote }}
+            - name: WP_FORCE_HOST
+              value: {{ index .Values.ingress.hosts 0 | quote }}
             volumeMounts:
             - mountPath: /etc/php/7.2/fpm/php-fpm.conf
               name: config-volume

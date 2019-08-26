@@ -95,6 +95,10 @@ spec:
             value: {{ .Values.offload.local_domains | quote }}
           - name: WP_DEFAULT_HOST
             value: {{ index .Values.ingress.hosts 0 | quote }}
+          - name: WP_FORCE_HOST
+            value: {{ index .Values.ingress.hosts 0 | quote }}
+          - name: WP_PLUGINS
+            value: {{ join " " Values.plugins | quote }}
           ports:
             - name: fpm
               containerPort: 9000
