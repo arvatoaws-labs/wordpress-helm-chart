@@ -12,7 +12,7 @@ metadata:
   annotations:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
-    "helm.sh/hook-weight": "1"    
+    "helm.sh/hook-weight": "1"
     "helm.sh/hook": {{ $hooktype }}
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
@@ -22,7 +22,7 @@ spec:
       containers:
       - name: job-done
         image: busybox
-        command: ['sh', '-c', 'echo "all jobs completed"']      
+        command: ['sh', '-c', 'echo "all jobs completed"']
       initContainers:
       {{- if $hookvalue }}
       {{- range $hookname := $hookvalue }}
@@ -35,7 +35,7 @@ spec:
         env:
         - name: MYSQL_HOST
           value: {{ $.Values.externalDatabase.host | quote }}
-        - name: MYSQL_PORT       
+        - name: MYSQL_PORT
           value: {{ $.Values.externalDatabase.port | quote }}
         - name: MYSQL_DATABASE
           value: {{ $.Values.externalDatabase.database | quote }}
@@ -74,7 +74,7 @@ spec:
         - name: WP_DEFAULT_HOST
           value: {{ index $.Values.ingress.hosts 0 | quote }}
         - name: WP_PLUGINS
-          value: {{ join " " $.Values.plugins | quote }}          
+          value: {{ join " " $.Values.plugins | quote }}
         - name: WORDPRESS_FIRSTNAME
           value: {{ $.Values.wordpressFirstName | quote }}
         - name: WORDPRESS_LASTNAME
@@ -95,6 +95,9 @@ spec:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: wordpress-password
+{{- if $.Values.extraEnv }}
+{{ toYaml $.Values.extraEnv | indent 8 }}
+{{- end }}
         volumeMounts:
           - mountPath: /etc/php/7.2/fpm/php-fpm.conf
             name: config-volume
@@ -106,7 +109,7 @@ spec:
             name: config-volume
             subPath: wp-config.php
       {{- end }}
-      {{- end }}       
+      {{- end }}
       restartPolicy: Never
       volumes:
       - name: config-volume
@@ -115,6 +118,6 @@ spec:
           # to add to the container
           name: {{ template "wordpress.fullname" $ }}
   backoffLimit: 4
----  
+---
 {{- end }}
 {{- end }}
