@@ -747,10 +747,16 @@ data:
     }
 
     /*
-     * Support for wp cli
-     */
-    if ( defined( 'WP_CLI' ) && WP_CLI && ! isset( $_SERVER['HTTP_HOST'] ) ) {
-        $_SERVER['HTTP_HOST'] = 'wp-cli.org';
+    * Support for wp cli and others
+    */
+    if(!isset($_SERVER['HTTP_HOST'])) {
+        if(getenv('WP_DEFAULT_HOST')) {
+            $_SERVER['HTTP_HOST'] = getenv('WP_DEFAULT_HOST');
+            $_SERVER['SERVER_NAME']  = getenv('WP_DEFAULT_HOST');
+        } elseif (defined( 'WP_CLI' )  && WP_CLI) {
+            $_SERVER['HTTP_HOST'] = 'wp-cli.org';
+            $_SERVER['SERVER_NAME'] = 'wp-cli.org';
+        }
     }
 
     /*

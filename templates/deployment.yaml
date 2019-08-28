@@ -98,7 +98,7 @@ spec:
           - name: WP_PLUGINS
             value: {{ join " " .Values.plugins | quote }}
 {{- if .Values.extraEnv }}
-{{ toYaml .Values.extraEnv | indent 8 }}
+{{ toYaml .Values.extraEnv | indent 10 }}
 {{- end }}
           ports:
             - name: fpm
