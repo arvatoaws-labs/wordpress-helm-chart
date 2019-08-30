@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-bats-tests"
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+  - name: {{ .Release.Name }}-bats-tests
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+    imagePullPolicy: {{ .Values.image.pullPolicy }}
+    command:
+      - /scripts/run-bats-tests.sh
+    env:
+      - name: WP_DEFAULT_HOST
+        value: {{ index .Values.ingress.hosts 0 | quote }}
+  restartPolicy: Never

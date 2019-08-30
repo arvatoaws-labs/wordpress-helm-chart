@@ -628,6 +628,9 @@ data:
         location ^~ /wp-config {
           return 403;
         }
+        location ^~ /wp-settings {
+          return 403;
+        }
 
         location / {
           # This is cool because no php is touched for static content.
