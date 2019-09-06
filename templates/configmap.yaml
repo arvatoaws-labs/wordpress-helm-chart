@@ -624,11 +624,21 @@ data:
           return 403;
         }
 
+        {{ if .Values.nginx.disallow_bots }}
+        # deny robot access
+        location = /robots.txt {
+          return 200 "User-agent: *\nDisallow: /";
+        }
+        {{ end }}
+
         # private files
         location ^~ /wp-config {
           return 403;
         }
         location ^~ /wp-settings {
+          return 403;
+        }
+        location ^~ /wp-cron {
           return 403;
         }
 
