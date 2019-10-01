@@ -613,9 +613,13 @@ data:
         root /app;
         ## This should be in your http block and if it is, it's not needed here.
         index index.php;
-
+        
+        {{ if .Values.nginx.client_max_body_size }}
+        client_max_body_size .Values.nginx.client_max_body_size;
+        {{ else }}
         client_max_body_size 10M;
-
+        {{ end }}
+        
         # default files forbidden due to version info
         location ^~ /readme.html {
           return 403;
