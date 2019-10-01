@@ -615,7 +615,7 @@ data:
         index index.php;
         
         {{ if .Values.nginx.client_max_body_size }}
-        client_max_body_size .Values.nginx.client_max_body_size;
+        client_max_body_size {{ .Values.nginx.client_max_body_size }};
         {{ else }}
         client_max_body_size 10M;
         {{ end }}
