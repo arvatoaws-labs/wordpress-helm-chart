@@ -146,6 +146,7 @@ hooks:
   post-upgrade:
     - wait-for-mysql-user
     - update-wp-core-database
+    - activate-wp-plugins
     - migrate-amazon-s3
 
 externalDatabase:
