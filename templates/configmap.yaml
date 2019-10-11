@@ -602,7 +602,7 @@ data:
       # Designed to be included in any server {} block.
       # Upstream to abstract backend connection(s) for php
       upstream php-backend {
-        server 127.0.0.1:9000 max_conns=10;
+        server 127.0.0.1:9000 max_conns={{ .Values.php.fpm.pm.max_children }};
       }
 
       server {
@@ -624,7 +624,7 @@ data:
           return 403;
         }
 
-        {{ if .Values.nginx.disallow_bots }}
+        {{ if .Values.nginx.disallow_robots }}
         # deny robot access
         location = /robots.txt {
           return 200 "User-agent: *\nDisallow: /";
@@ -658,9 +658,10 @@ data:
           fastcgi_buffer_size 32k;
         }
 
-        location ~* \.(js|css|png|jpg|jpeg|gif|ico)$ {
-          expires max;
+        location ~* ^.+\.(ogg|ogv|svg|svgz|eot|otf|woff|mp4|ttf|rss|atom|jpg|jpeg|gif|png|ico|zip|tgz|gz|rar|bz2|doc|xls|exe|ppt|tar|mid|midi|wav|bmp|rtf)$ {
+          #access_log off;
           log_not_found off;
+          expires max;
         }
 
         # Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
@@ -682,9 +683,6 @@ data:
           fastcgi_pass php-backend;
           access_log off;
           allow 127.0.0.1;
-          allow 10.0.0.0/8;
-          allow 172.16.0.0/12;
-          allow 192.168.0.0/16;
           deny all;
         }
 
@@ -693,9 +691,6 @@ data:
           stub_status on;
           access_log off;
           allow 127.0.0.1;
-          allow 10.0.0.0/8;
-          allow 172.16.0.0/12;
-          allow 192.168.0.0/16;
           deny all;
         }
       }
@@ -865,9 +860,24 @@ data:
      *
      * @link https://codex.wordpress.org/Debugging_in_WordPress
      */
-    define('WP_DEBUG', getenv('WP_DEBUG') ? 'true' : 'false');
-    define('WP_DEBUG_LOG', getenv('WP_DEBUG_LOG') ? 'true' : 'false');
-    define('WP_DEBUG_DISPLAY', getenv('WP_DEBUG_LOG') ? 'true' : 'false');
+    define('WP_DEBUG', filter_var(getenv('WP_DEBUG'), FILTER_VALIDATE_BOOLEAN));
+    define('WP_DEBUG_LOG', filter_var(getenv('WP_DEBUG_LOG'), FILTER_VALIDATE_BOOLEAN));
+    define('WP_DEBUG_DISPLAY', filter_var(getenv('WP_DEBUG_DISPLAY'), FILTER_VALIDATE_BOOLEAN));
+
+    /**
+    * multisite
+    */
+    define('WP_ALLOW_MULTISITE', filter_var(getenv('WP_ALLOW_MULTISITE'), FILTER_VALIDATE_BOOLEAN));
+    define('WP_USE_MULTISITE', filter_var(getenv('WP_USE_MULTISITE'), FILTER_VALIDATE_BOOLEAN));
+
+    if (WP_USE_MULTISITE == 'true') {
+      define('MULTISITE', true);
+      define('SUBDOMAIN_INSTALL', true);
+      define('DOMAIN_CURRENT_SITE', getenv('WP_DEFAULT_HOST'));
+      define('PATH_CURRENT_SITE', '/');
+      define('SITE_ID_CURRENT_SITE', 1);
+      define('BLOG_ID_CURRENT_SITE', 1);
+    }
 
     /* That's all, stop editing! Happy blogging. */
 

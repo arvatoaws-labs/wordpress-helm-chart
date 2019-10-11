@@ -50,6 +50,7 @@ affinity: {}
 
 nginx:
   resources: {}
+  disallow_robots: false
 
 php:
   resources: {}
