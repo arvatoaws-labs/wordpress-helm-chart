@@ -598,6 +598,11 @@ data:
 
       include /etc/nginx/conf.d/*.conf;
 
+      server_tokens off;
+
+      real_ip_header X-Forwarded-For;
+      set_real_ip_from 0.0.0.0/0;
+
       # WordPress single site rules.
       # Designed to be included in any server {} block.
       # Upstream to abstract backend connection(s) for php
@@ -613,13 +618,9 @@ data:
         root /app;
         ## This should be in your http block and if it is, it's not needed here.
         index index.php;
-        
-        {{ if .Values.nginx.client_max_body_size }}
+
         client_max_body_size {{ .Values.nginx.client_max_body_size }};
-        {{ else }}
-        client_max_body_size 10M;
-        {{ end }}
-        
+
         # default files forbidden due to version info
         location ^~ /readme.html {
           return 403;
@@ -687,6 +688,9 @@ data:
           fastcgi_pass php-backend;
           access_log off;
           allow 127.0.0.1;
+          allow 10.0.0.0/8;
+          allow 172.16.0.0/12;
+          allow 192.168.0.0/16;
           deny all;
         }
 
@@ -695,6 +699,9 @@ data:
           stub_status on;
           access_log off;
           allow 127.0.0.1;
+          allow 10.0.0.0/8;
+          allow 172.16.0.0/12;
+          allow 192.168.0.0/16;
           deny all;
         }
       }
@@ -749,6 +756,22 @@ data:
      * Only run cronjobs as real cronjobs in the backend
      */
     define('DISABLE_WP_CRON', 'true');
+
+    /*
+    * Map HTTP Host
+    */
+    $hostname_mapping = array();
+    {{- range $key, $value := $.Values.hostname_mapping }}
+    $hostname_mapping['{{ $key }}'] = '{{ $value}}';
+    {{- end }}
+
+    if(isset($_SERVER['HTTP_HOST'])) {
+      if(isset($hostname_mapping[$_SERVER['HTTP_HOST']])) {
+        $_SERVER['HTTP_HOST'] = $hostname_mapping[$_SERVER['HTTP_HOST']];
+        $_SERVER['SERVER_NAME'] = $hostname_mapping[$_SERVER['HTTP_HOST']];
+        file_put_contents('/tmp/debug.txt', var_export($_SERVER, true));
+      }
+    }
 
     /*
     * Force HTTP Host
@@ -877,10 +900,16 @@ data:
     if (WP_USE_MULTISITE == 'true') {
       define('MULTISITE', true);
       define('SUBDOMAIN_INSTALL', true);
-      define('DOMAIN_CURRENT_SITE', getenv('WP_DEFAULT_HOST'));
+      define('DOMAIN_CURRENT_SITE', getenv('WP_MULTISITE_HOST'));
       define('PATH_CURRENT_SITE', '/');
       define('SITE_ID_CURRENT_SITE', 1);
       define('BLOG_ID_CURRENT_SITE', 1);
+      define('ADMIN_COOKIE_PATH', '/');
+      define('COOKIE_DOMAIN', '');
+      define('COOKIEPATH', '');
+      define('SITECOOKIEPATH', '');
+      define('FORCE_SSL_ADMIN', true);
+      #define('NOBLOGREDIRECT', '' );
     }
 
     /* That's all, stop editing! Happy blogging. */

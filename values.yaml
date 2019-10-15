@@ -51,6 +51,7 @@ affinity: {}
 nginx:
   resources: {}
   disallow_robots: false
+  client_max_body_size: 10M
 
 php:
   resources: {}
@@ -148,6 +149,8 @@ hooks:
     - update-wp-core-database
     - activate-wp-plugins
     - migrate-amazon-s3
+
+hostname_mapping:
 
 externalDatabase:
 ## All of these values are only used when mariadb.enabled is set to false
