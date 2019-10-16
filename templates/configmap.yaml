@@ -769,7 +769,6 @@ data:
       if(isset($hostname_mapping[$_SERVER['HTTP_HOST']])) {
         $_SERVER['HTTP_HOST'] = $hostname_mapping[$_SERVER['HTTP_HOST']];
         $_SERVER['SERVER_NAME'] = $hostname_mapping[$_SERVER['HTTP_HOST']];
-        file_put_contents('/tmp/debug.txt', var_export($_SERVER, true));
       }
     }
 
