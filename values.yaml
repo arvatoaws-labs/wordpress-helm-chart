@@ -152,6 +152,12 @@ hooks:
 
 hostname_mapping:
 
+external_secret:
+  enabled: false
+  backendType: systemManager
+  mapping:
+#    db-password: /dev/wordpress-1/DB/password
+
 externalDatabase:
 ## All of these values are only used when mariadb.enabled is set to false
   ## Database host
