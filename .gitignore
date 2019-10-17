@@ -1,2 +1,3 @@
 kubeconfig.yaml
 values_*.yaml
+test.sh
