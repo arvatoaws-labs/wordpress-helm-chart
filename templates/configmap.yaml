@@ -647,6 +647,13 @@ data:
           return 403;
         }
 
+        {{ if .Values.offload.cloudfront }}
+        # offload uploads to s3
+        location ^~ /wp-content/uploads/ {
+          rewrite "^/wp-content/uploads/(.*)$" "https://{{ .Values.offload.cloudfront }}/wp-content/uploads/$1" break;
+        }
+        {{ end }}
+
         location / {
           # This is cool because no php is touched for static content.
           # include the "?$args" part so non-default permalinks doesn't break when using query string
