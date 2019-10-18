@@ -137,7 +137,6 @@ hooks:
     - verify-wp-core-checksums
     - install-wp-core
     - update-wp-core-database
-    - update-wp-admin-user
     - activate-wp-plugins
   post-install:
   pre-upgrade:
@@ -150,9 +149,9 @@ hooks:
     - activate-wp-plugins
     - migrate-amazon-s3
 
-hostname_mapping:
+hostnameMapping:
 
-external_secret:
+externalSecrets:
   enabled: false
   backendType: systemManager
   mapping:

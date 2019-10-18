@@ -1,2 +1,2 @@
 
-helm upgrade --atomic --wait -i wp-multisite -f values_test.yaml --namespace wp-multisite .
+helm upgrade --atomic --wait -i wp-testsite -f values_test.yaml --namespace wp-testsite .

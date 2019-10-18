@@ -768,7 +768,7 @@ data:
     * Map HTTP Host
     */
     $hostname_mapping = array();
-    {{- range $key, $value := $.Values.hostname_mapping }}
+    {{- range $key, $value := $.Values.hostnameMapping }}
     $hostname_mapping['{{ $key }}'] = '{{ $value}}';
     {{- end }}
 

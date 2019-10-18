@@ -12,7 +12,7 @@ metadata:
   annotations:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
-    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-weight": "2"
     "helm.sh/hook": {{ $hooktype }}
     "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
 spec:
@@ -49,14 +49,14 @@ spec:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: db-password
-        {{- if $.Values.externalDatabase.root_user }}
+        {{- if or $.Values.externalDatabase.root_user ($.Values.externalSecrets.enabled) }}
         - name: MYSQL_ROOT_USER
           valueFrom:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: db-root-username
         {{- end }}
-        {{- if $.Values.externalDatabase.root_password }}
+        {{- if or $.Values.externalDatabase.root_password ($.Values.externalSecrets.enabled) }}
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
