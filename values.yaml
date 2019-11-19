@@ -217,3 +217,6 @@ wordpressTablePrefix: wp_
 ## ref: https://github.com/bitnami/bitnami-docker-wordpress#connect-wordpress-docker-container-to-an-existing-database
 ##
 wordpressSkipInstall: "no"
+
+debug:
+  enabled: false
