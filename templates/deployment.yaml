@@ -96,9 +96,9 @@ spec:
           - name: WP_DEFAULT_HOST
             value: {{ index .Values.ingress.hosts 0 | quote }}
           - name: WP_DEBUG
-            value: {{ .Values.debug | quote }}
+            value: {{ .Values.debug.enabled | quote }}
           - name: WP_DEBUG_LOG
-            value: {{ .Values.debug.log | quote }}
+            value: {{ .Values.debug.enabled | quote }}
           - name: WP_PLUGINS
             value: {{ join " " .Values.plugins | quote }}
 {{- if .Values.extraEnv }}
