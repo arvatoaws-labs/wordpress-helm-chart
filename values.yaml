@@ -137,7 +137,7 @@ hooks:
     - verify-wp-core-checksums
     - install-wp-core
     - update-wp-core-database
-    - activate-wp-plugins
+    #- activate-wp-plugins
   post-install:
   pre-upgrade:
     - wait-for-mysql-user
