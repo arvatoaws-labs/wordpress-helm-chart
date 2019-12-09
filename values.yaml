@@ -52,6 +52,7 @@ nginx:
   resources: {}
   disallow_robots: false
   client_max_body_size: 10M
+  additonal_config:
 
 php:
   resources: {}
