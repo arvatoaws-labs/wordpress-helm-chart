@@ -657,9 +657,9 @@ data:
         }
         {{ end }}
 
+        {{ if .Values.nginx.additional_config }}
         {{ .Values.nginx.additional_config | nindent 8 }}
-
-        #rewrite /wp-admin$ /wp-admin/ permanent;
+        {{ end }}
 
         # default location
         location / {
