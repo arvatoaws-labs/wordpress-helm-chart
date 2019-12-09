@@ -619,6 +619,9 @@ data:
         ## This should be in your http block and if it is, it's not needed here.
         index index.php;
 
+        server_name_in_redirect off;
+        port_in_redirect off;
+
         client_max_body_size {{ .Values.nginx.client_max_body_size }};
 
         # default files forbidden due to version info
@@ -655,6 +658,8 @@ data:
         {{ end }}
 
         {{ .Values.nginx.additional_config | nindent 8 }}
+
+        #rewrite /wp-admin$ /wp-admin/ permanent;
 
         # default location
         location / {
