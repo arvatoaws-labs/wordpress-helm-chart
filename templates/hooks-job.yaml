@@ -49,20 +49,16 @@ spec:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: db-password
-        {{- if or $.Values.externalDatabase.root_user ($.Values.externalSecrets.enabled) }}
         - name: MYSQL_ROOT_USER
           valueFrom:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: db-root-username
-        {{- end }}
-        {{- if or $.Values.externalDatabase.root_password ($.Values.externalSecrets.enabled) }}
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: db-root-password
-        {{- end }}
         - name: WP_OFFLOAD_BUCKET
           value: {{ $.Values.offload.bucket | quote }}
         - name: WP_OFFLOAD_REGION
