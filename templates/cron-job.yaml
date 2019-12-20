@@ -10,6 +10,7 @@ metadata:
 spec:
   schedule: "*/5 * * * *"
   concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 1800
   jobTemplate:
     spec:
       template:
