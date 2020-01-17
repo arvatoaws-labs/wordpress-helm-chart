@@ -128,6 +128,7 @@ offload:
 plugins:
   - amazon-s3-and-cloudfront
   - amazon-s3-and-cloudfront-tweaks
+  - wp-ses
 
 hooks:
   pre-install:
