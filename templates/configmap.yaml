@@ -649,6 +649,12 @@ data:
         location ^~ /wp-cron {
           return 403;
         }
+        location ^~ /wp-load {
+          return 403;
+        }
+        location ^~ /xmlrpc {
+          return 403;
+        }
 
         {{ if .Values.offload.cloudfront }}
         # offload uploads to s3
