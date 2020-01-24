@@ -221,3 +221,6 @@ wordpressSkipInstall: "no"
 
 debug:
   enabled: false
+
+supercache:
+  enabled: false

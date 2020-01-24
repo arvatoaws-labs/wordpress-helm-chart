@@ -834,8 +834,11 @@ data:
     /*
      * WP Super Cache setting
      */
-    #define('WPCACHEHOME', dirname(__FILE__) . '/wp-content/plugins/wp-super-cache/');
-    #define('WP_CACHE', true);
+    if (isset(getenv('WP_SUPER_CACHE')) && (getenv('WP_SUPER_CACHE') == 'true')) {
+      define('WPCACHEHOME', dirname(__FILE__) . '/wp-content/plugins/wp-super-cache/');
+      define('WP_CACHE', true);
+    }
+    
 
     /*
      * WP Offload setting
@@ -893,7 +896,7 @@ data:
      * You can have multiple installations in one database if you give each
      * a unique prefix. Only numbers, letters, and underscores please!
      */
-    $table_prefix  = 'wp_';
+    $table_prefix  = getenv('WP_TABLE_PREFIX');
 
     /**
      * For developers: WordPress debugging mode.
