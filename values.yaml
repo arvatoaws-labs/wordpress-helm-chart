@@ -52,6 +52,7 @@ nginx:
   resources: {}
   disallow_robots: false
   client_max_body_size: 10M
+  # this document will be attached to the nginx server block
   additional_config:
 
 php:
@@ -70,6 +71,10 @@ php:
     post_max_size: 15M
     date.timezone: Europe/Berlin
     display_errors: 'Off'
+
+wordpress:
+  # this document will be attached to the wp-config.php file
+  additional_config:
 
 ## Additional environment variables to set
 extraEnv: []
@@ -118,6 +123,7 @@ exporter:
     log_level: debug
     resources: {}
 
+# settings are used for WP Offload Media plugin
 offload:
   bucket: null
   region: null
@@ -125,10 +131,12 @@ offload:
   cloudfront: null
   local_domains: null
 
+# these plugins will be activated using the activate-wp-plugins hook
 plugins:
   - amazon-s3-and-cloudfront
   - amazon-s3-and-cloudfront-tweaks
 
+# this sections allows to configure different hooks at different stages of the helm deployment
 hooks:
   pre-install:
     - wait-for-mysql-root
@@ -150,14 +158,28 @@ hooks:
     - activate-wp-plugins
     - migrate-amazon-s3
 
+# this mapping can be used to map external names to internal hostnames
+# usage example:
+# foo.k8s.example.com: "foo.com"
+# bar.k8s.example.com: "bar.com"
+# this allows to use the same certificate in k8s for multiple external names using a cdn like cloudfront
+# the same can be done using the WP_FORCE_HOST env setting but it only allows one mapping
 hostnameMapping:
 
+# this section allows to inject external secrets into the wordpress deployment
 externalSecrets:
   enabled: false
   backendType: systemManager
   mapping:
-#    db-password: /dev/wordpress-1/DB/password
+#    db-root-username: /dev/wordpress-1/DB/username
+#    db-root-password: /dev/wordpress-1/DB/password
+#    db-username: /dev/exampleblog/DB/username
+#    db-password: /dev/exampleblog/DB/password
+#    wordpress-username: /dev/exampleblog/wordpress/username
+#    wordpress-password: /dev/exampleblog/wordpress/password
 
+# this section confiures the external database
+# this section is ignored if externalSecrets are used
 externalDatabase:
 ## All of these values are only used when mariadb.enabled is set to false
   ## Database host

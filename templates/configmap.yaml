@@ -832,15 +832,9 @@ data:
     define('WP_HOME', $proto . '://' . $_SERVER['HTTP_HOST']);
 
     /*
-     * WP Super Cache setting
-     */
-    #define('WPCACHEHOME', dirname(__FILE__) . '/wp-content/plugins/wp-super-cache/');
-    #define('WP_CACHE', true);
-
-    /*
      * WP Offload setting
      */
-    define( 'WPOS3_SETTINGS', serialize( array(
+    define( 'AS3CF_SETTINGS', serialize( array(
         // S3 bucket to upload files
         'bucket' => getenv('WP_OFFLOAD_BUCKET'),
         // S3 bucket region (e.g. 'us-west-1' - leave blank for default region)
@@ -931,6 +925,10 @@ data:
       define('FORCE_SSL_ADMIN', true);
       #define('NOBLOGREDIRECT', '' );
     }
+
+    {{ if .Values.wordpress.additional_config }}
+    {{ .Values.wordpress.additional_config | nindent 4 }}
+    {{ end }}
 
     /* That's all, stop editing! Happy blogging. */
 
