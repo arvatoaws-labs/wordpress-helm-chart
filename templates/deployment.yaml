@@ -7,6 +7,7 @@ metadata:
     helm.sh/chart: {{ include "wordpress.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
+  annotations:
     {{- if .Values.wordpress.uptime }}
     downscaler/uptime: {{.Values.wordpress.uptime}}
     {{- end }}
