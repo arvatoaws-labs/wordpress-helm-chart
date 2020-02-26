@@ -52,6 +52,7 @@ nginx:
   resources: {}
   disallow_robots: false
   client_max_body_size: 10M
+  cors_origins: []
   # this document will be attached to the nginx server block
   additional_config:
 
