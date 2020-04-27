@@ -63,6 +63,11 @@ spec:
           - mountPath: /app/wp-config.php
             name: config-volume
             subPath: wp-config.php
+          lifecycle:
+            preStop:
+              exec:
+                # SIGTERM triggers a quick exit; gracefully terminate instead
+                command: ["/usr/sbin/nginx","-s","quit"]
           resources:
 {{ toYaml .Values.nginx.resources | indent 12 }}
         - name: {{ .Chart.Name }}-php-fpm
@@ -126,6 +131,10 @@ spec:
           - mountPath: /app/wp-config.php
             name: config-volume
             subPath: wp-config.php
+          lifecycle:
+            preStop:
+              exec:
+                command: ["sleep", "25"]
           resources:
 {{ toYaml .Values.php.resources | indent 12 }}
 {{- if ( .Values.monitoring.enabled ) }}
@@ -184,6 +193,7 @@ spec:
           resources:
 {{ toYaml .Values.exporter.nginx.resources | indent 12 }}
 {{ end }}
+      terminationGracePeriodSeconds: 60
       volumes:
       - name: config-volume
         configMap:
