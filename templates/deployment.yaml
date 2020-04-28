@@ -136,10 +136,10 @@ spec:
             subPath: wp-config.php
           lifecycle:
             preStop:
-                command:
-                  - /bin/bash
-                  - -c
-                  - "sleep 30"
+              command:
+                - /bin/bash
+                - -c
+                - "sleep 30"
           resources:
 {{ toYaml .Values.php.resources | indent 12 }}
 {{- if ( .Values.monitoring.enabled ) }}
