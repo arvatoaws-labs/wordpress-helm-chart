@@ -592,7 +592,7 @@ data:
       sendfile on;
       #tcp_nopush     on;
 
-      keepalive_timeout 65;
+      keepalive_timeout 20;
 
       gzip on;
 
@@ -739,6 +739,11 @@ data:
           allow 172.16.0.0/12;
           allow 192.168.0.0/16;
           deny all;
+        }
+
+        # deny robot access
+        location ~ /nginx-ping {
+          return 200 "pong";
         }
 
         # nginx monitor

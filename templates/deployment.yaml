@@ -67,7 +67,10 @@ spec:
             preStop:
               exec:
                 # SIGTERM triggers a quick exit; gracefully terminate instead
-                command: ["/usr/sbin/nginx","-s","quit"]
+                command:
+                  - /bin/bash
+                  - -c
+                  - "sleep 30 && /usr/sbin/nginx -s quit"
           resources:
 {{ toYaml .Values.nginx.resources | indent 12 }}
         - name: {{ .Chart.Name }}-php-fpm
@@ -133,8 +136,10 @@ spec:
             subPath: wp-config.php
           lifecycle:
             preStop:
-              exec:
-                command: ["sleep", "25"]
+                command:
+                  - /bin/bash
+                  - -c
+                  - "sleep 30"
           resources:
 {{ toYaml .Values.php.resources | indent 12 }}
 {{- if ( .Values.monitoring.enabled ) }}

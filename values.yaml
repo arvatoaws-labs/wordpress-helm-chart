@@ -19,7 +19,10 @@ service:
 
 ingress:
   enabled: false
-  annotations: {}
+  annotations:
+    alb.ingress.kubernetes.io/target-group-attributes: deregistration_delay.timeout_seconds=25,slow_start.duration_seconds=30 # deregistration_delay must be less or equal to preStop delay
+    alb.ingress.kubernetes.io/healthcheck-path: /nginx-ping
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: 5
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
