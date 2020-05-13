@@ -741,7 +741,7 @@ data:
           deny all;
         }
 
-        # deny robot access
+        # nginx ping
         location ~ /nginx-ping {
           return 200 "pong";
           access_log off;
