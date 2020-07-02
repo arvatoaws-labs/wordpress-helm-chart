@@ -635,6 +635,7 @@ data:
 
         server_name_in_redirect off;
         port_in_redirect off;
+        absolute_redirect off;
 
         client_max_body_size {{ .Values.nginx.client_max_body_size }};
 
