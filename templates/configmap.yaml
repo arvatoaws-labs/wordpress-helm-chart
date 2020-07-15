@@ -908,14 +908,14 @@ data:
      *
      * @since 2.6.0
      */
-    define('AUTH_KEY',         '{{ randAlphaNum 64 | b64enc }}');
-    define('SECURE_AUTH_KEY',  '{{ randAlphaNum 64 | b64enc }}');
-    define('LOGGED_IN_KEY',    '{{ randAlphaNum 64 | b64enc }}');
-    define('NONCE_KEY',        '{{ randAlphaNum 64 | b64enc }}');
-    define('AUTH_SALT',        '{{ randAlphaNum 64 | b64enc }}');
-    define('SECURE_AUTH_SALT', '{{ randAlphaNum 64 | b64enc }}');
-    define('LOGGED_IN_SALT',   '{{ randAlphaNum 64 | b64enc }}');
-    define('NONCE_SALT',       '{{ randAlphaNum 64 | b64enc }}');
+    define('AUTH_KEY',         getenv('AUTH_KEY') ?:          '{{ randAlphaNum 64 | b64enc }}');
+    define('SECURE_AUTH_KEY',  getenv('SECURE_AUTH_KEY') ?:   '{{ randAlphaNum 64 | b64enc }}');
+    define('LOGGED_IN_KEY',    getenv('LOGGED_IN_KEY') ?:     '{{ randAlphaNum 64 | b64enc }}');
+    define('NONCE_KEY',        getenv('NONCE_KEY') ?:         '{{ randAlphaNum 64 | b64enc }}');
+    define('AUTH_SALT',        getenv('AUTH_SALT') ?:         '{{ randAlphaNum 64 | b64enc }}');
+    define('SECURE_AUTH_SALT', getenv('SECURE_AUTH_SALT') ?:  '{{ randAlphaNum 64 | b64enc }}');
+    define('LOGGED_IN_SALT',   getenv('LOGGED_IN_SALT') ?:    '{{ randAlphaNum 64 | b64enc }}');
+    define('NONCE_SALT',       getenv('NONCE_SALT') ?:        '{{ randAlphaNum 64 | b64enc }}');
 
     /**#@-*/
 
