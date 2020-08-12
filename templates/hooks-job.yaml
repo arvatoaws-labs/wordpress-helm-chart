@@ -91,6 +91,17 @@ spec:
             secretKeyRef:
               name: {{ template "wordpress.fullname" $ }}
               key: wordpress-password
+    {{- range $key, $value := $.Values.externalSecrets.mapping }}
+      {{ if not (contains "wordpress-" $key) }}
+        {{ if not (contains "-root-" $key) }}
+        - name: {{ $key | upper | replace "-" "_" }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ template "wordpress-bedrock.fullname" $ }}
+              key: {{ $key }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
 {{- if $.Values.extraEnv }}
 {{ toYaml $.Values.extraEnv | indent 8 }}
 {{- end }}
