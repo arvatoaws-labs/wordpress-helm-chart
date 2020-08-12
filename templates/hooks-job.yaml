@@ -97,7 +97,7 @@ spec:
         - name: {{ $key | upper | replace "-" "_" }}
           valueFrom:
             secretKeyRef:
-              name: {{ template "wordpress-bedrock.fullname" $ }}
+              name: {{ template "wordpress.fullname" $ }}
               key: {{ $key }}
         {{- end }}
       {{- end }}
