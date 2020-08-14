@@ -144,6 +144,7 @@ offload:
 plugins:
   - amazon-s3-and-cloudfront
   - amazon-s3-and-cloudfront-tweaks
+  - wp-ses
 
 # this sections allows to configure different hooks at different stages of the helm deployment
 hooks:
