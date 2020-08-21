@@ -11,6 +11,13 @@ metadata:
     {{- if .Values.wordpress.uptime }}
     downscaler/uptime: {{.Values.wordpress.uptime}}
     {{- end }}
+    checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+  {{- if .Values.podAnnotations }}
+    ## Custom pod annotations
+    {{- range $key, $value := .Values.podAnnotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+  {{- end }}
 spec:
   schedule: "{{ .Values.wordpress.cron_schedule }}"
   concurrencyPolicy: Replace
