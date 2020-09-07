@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: {{ include "wordpress.fullname" . }}-cron
   labels:
-    app.kubernetes.io/name: {{ include "wordpress.name" . }}
+    app.kubernetes.io/name: {{ include "wordpress.name" . }}-cron
     helm.sh/chart: {{ include "wordpress.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -21,7 +21,7 @@ spec:
       template:
         metadata:
           labels:
-            app.kubernetes.io/name: {{ include "wordpress.name" . }}
+            app.kubernetes.io/name: {{ include "wordpress.name" . }}-cron
             app.kubernetes.io/instance: {{ .Release.Name }}
           {{- if .Values.podLabels }}
             ## Custom pod labels
@@ -90,6 +90,8 @@ spec:
               name: config-volume
               subPath: wp-config.php
           restartPolicy: OnFailure
+          resources:
+{{ toYaml .Values.php.resources | indent 12 }}
           volumes:
           - name: config-volume
             configMap:
