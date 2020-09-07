@@ -89,9 +89,9 @@ spec:
             - mountPath: /app/wp-config.php
               name: config-volume
               subPath: wp-config.php
+            resources:
+{{ toYaml .Values.php.resources | indent 14 }}
           restartPolicy: OnFailure
-          resources:
-{{ toYaml .Values.php.resources | indent 12 }}
           volumes:
           - name: config-volume
             configMap:
