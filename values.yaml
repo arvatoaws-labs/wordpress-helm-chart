@@ -34,6 +34,16 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+efs:
+  enabled: false
+  # fsid: fs-12345
+  # subpath: project
+  aws-region: eu-central-1
+  # volumeMounts:
+  # - name: efs
+  #   mountPath: /app/shared
+
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little

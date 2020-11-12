@@ -89,6 +89,9 @@ spec:
             - mountPath: /app/wp-config.php
               name: config-volume
               subPath: wp-config.php
+{{- if .Values.efs.enabled }}
+{{ toYaml .Values.efs.volumeMounts | indent 12 }}
+{{- end }}
             resources:
 {{ toYaml .Values.php.resources | indent 14 }}
           restartPolicy: OnFailure
@@ -98,3 +101,9 @@ spec:
               # Provide the name of the ConfigMap containing the files you want
               # to add to the container
               name: {{ include "wordpress.fullname" . }}
+{{- if .Values.efs.enabled }}
+          - name: efs
+            nfs:
+              path: /{{ .Values.efs.subPath }}
+              server: {{ .Values.efs.fsid }}.efs.{{ .Values.efs.aws-region }}.amazonaws.com
+{{- end }}
