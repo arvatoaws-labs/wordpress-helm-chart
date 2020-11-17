@@ -7,8 +7,8 @@ replicaCount: 1
 image:
   repository: arvatoaws/wordpress
   tag: latest
-  #pullPolicy: IfNotPresent
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
+  #pullPolicy: Always
 
 nameOverride: ""
 fullnameOverride: ""
@@ -109,7 +109,7 @@ exporter:
     image:
       repository: nginx/nginx-prometheus-exporter
       tag: 0.3.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     port: 9113
     telemetry_path: /metrics
     nginx_plus: false
@@ -124,7 +124,7 @@ exporter:
     image:
       repository: hipages/php-fpm_exporter
       tag: 1.0.0
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
     port: 9253
     metrics: /metrics
     scrape_uri: "tcp://127.0.0.1:9000/fpm-status"
