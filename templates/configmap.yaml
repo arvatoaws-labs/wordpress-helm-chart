@@ -873,6 +873,10 @@ data:
      * WP Offload setting
      */
     define( 'AS3CF_SETTINGS', serialize( array(
+        // Storage Provider ('aws', 'do', 'gcp')
+        'provider' => 'aws',
+        // Use IAM Roles on Amazon Elastic Compute Cloud (EC2)
+        'use-server-roles' => true
         // S3 bucket to upload files
         'bucket' => getenv('WP_OFFLOAD_BUCKET'),
         // S3 bucket region (e.g. 'us-west-1' - leave blank for default region)
