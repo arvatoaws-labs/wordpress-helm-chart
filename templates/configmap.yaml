@@ -598,7 +598,12 @@ data:
 
       include /etc/nginx/conf.d/*.conf;
 
+      # Hide nginx version
       server_tokens off;
+      
+      # Hide PHP version
+      fastcgi_hide_header X-Powered-By;
+      proxy_hide_header X-Powered-By;
 
       real_ip_header X-Forwarded-For;
       set_real_ip_from 0.0.0.0/0;
