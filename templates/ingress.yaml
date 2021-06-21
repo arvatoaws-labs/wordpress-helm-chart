@@ -2,7 +2,7 @@
 {{- $fullName := include "wordpress.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
 {{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 {{- else -}}
 apiVersion: extensions/v1beta1
 {{- end }}
@@ -35,12 +35,17 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: {{ $fullName }}
                 port: 
                   name: http
-            path: /*
-            pathType: ImplementationSpecific
+            {{- else }}
+            backend:
+              serviceName: {{ $fullName }}
+              servicePort: {{ $svcPort }}
+            {{- end }}
   {{- end }}
 {{- end }}
