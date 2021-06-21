@@ -1,7 +1,7 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "wordpress.fullname" . -}}
 {{- $ingressPath := .Values.ingress.path -}}
-apiVersion: extensions/v1
+apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -32,11 +32,7 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              service:
-                name: {{ $fullName }}
-                port: 
-                  name: http
-            path: /*
-            pathType: ImplementationSpecific                  
+              serviceName: {{ $fullName }}
+              servicePort: http
   {{- end }}
 {{- end }}
