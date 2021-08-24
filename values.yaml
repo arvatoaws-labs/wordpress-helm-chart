@@ -182,6 +182,9 @@ hostnameMapping:
 # this section allows to inject external secrets into the wordpress deployment
 externalSecrets:
   enabled: false
+  engine: kube-external-secrets # external-secrets
+  region: eu-central-1
+  refreshInterval: "0"
   backendType: systemManager
   mapping:
 #    db-root-username: /dev/wordpress-1/DB/username
@@ -259,6 +262,9 @@ debug:
 
 hpa:
   enabled: true
+  engine: prometheus-adapter # keda
+  prometheus:
+    serverAddress: http://prometheus-operated.monitoring.svc.cluster.local:9090
   maxReplicas: 10
   targets:
     cpu: 70

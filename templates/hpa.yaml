@@ -1,18 +1,16 @@
 {{- if .Values.hpa.enabled }}
+{{- if eq .Values.hpa.engine "prometheus-adapter" }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ template "wordpress.fullname" . }}
+  name: {{ include "wordpress.fullname" . }}
   labels:
-    app: "{{ template "wordpress.fullname" . }}"
-    chart: "{{ template "wordpress.chart" . }}"
-    release: {{ .Release.Name | quote }}
-    heritage: {{ .Release.Service | quote }}
+{{ include "wordpress.labels" . | indent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ template "wordpress.fullname" . }}
+    name: {{ include "wordpress.fullname" . }}
   maxReplicas: {{ .Values.hpa.maxReplicas }}
   minReplicas: {{ .Values.replicaCount }}
   metrics:
@@ -42,4 +40,41 @@ spec:
       target:
         type: AverageValue
         averageValue: {{ .Values.hpa.targets.nginx }}
+{{- end }}
+{{- if eq .Values.hpa.engine "keda" }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "wordpress.fullname" . }}
+  labels:
+{{ include "wordpress.labels" . | indent 4 }}
+spec:
+  scaleTargetRef:
+    name: {{ include "wordpress.fullname" . }}
+  pollingInterval: 30
+  cooldownPeriod:  300
+  minReplicaCount: {{ .Values.replicaCount }}
+  maxReplicaCount: {{ .Values.hpa.maxReplicas }}
+  triggers:
+  - type: cpu
+    metadata:
+      type: Utilization
+      value: "{{ .Values.hpa.targets.cpu }}"
+  - type: memory
+    metadata:
+      type: Utilization
+      value: "{{ .Values.hpa.targets.memory }}"
+  - type: prometheus
+    metadata:
+      serverAddress: "{{ .Values.hpa.prometheus.serverAddress }}"
+      metricName: phpfpm_active_processes
+      threshold: '{{ .Values.hpa.targets.php }}'
+      query: sum(phpfpm_active_processes{service="{{ include "wordpress.fullname" . }}",namespace="{{ .Release.Namespace }}"})
+  - type: prometheus
+    metadata:
+      serverAddress: "{{ .Values.hpa.prometheus.serverAddress }}"
+      metricName: nginx_connections_active
+      threshold: '{{ .Values.hpa.targets.nginx }}'
+      query: sum(nginx_connections_active{service="{{ include "wordpress.fullname" . }}",namespace="{{ .Release.Namespace }}"})
+{{- end }}
 {{- end }}
