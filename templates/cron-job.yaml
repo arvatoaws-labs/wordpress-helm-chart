@@ -3,10 +3,7 @@ kind: CronJob
 metadata:
   name: {{ include "wordpress.fullname" . }}-cron
   labels:
-    app.kubernetes.io/name: {{ include "wordpress.name" . }}-cron
-    helm.sh/chart: {{ include "wordpress.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "wordpress.labels" . | indent 4 }}
   annotations:
     {{- if .Values.wordpress.uptime }}
     downscaler/uptime: {{.Values.wordpress.uptime}}

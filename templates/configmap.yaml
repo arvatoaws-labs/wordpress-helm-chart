@@ -3,10 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "wordpress.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "wordpress.name" . }}
-    helm.sh/chart: {{ include "wordpress.chart" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-    app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{ include "wordpress.labels" . | indent 4 }}
   annotations:
     # This is what defines this resource as a hook. Without this line, the
     # job is considered part of the release.
