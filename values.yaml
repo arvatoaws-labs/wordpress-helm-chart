@@ -141,7 +141,7 @@ exporter:
     ssl_verify: false
     timeout: "10s"
     nginx_retries: "0"
-    nginx_retry_interval: "3s"
+    nginx_retry_interval: "5s"
     resources: {}
 
   phpfpm:
