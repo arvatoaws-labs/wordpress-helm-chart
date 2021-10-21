@@ -70,7 +70,7 @@ spec:
             - name: WP_OFFLOAD_LOCAL_DOMAINS
               value: {{ .Values.offload.local_domains | quote }}
             - name: WP_DEFAULT_HOST
-              value: {{ index .Values.ingress.hosts 0 | quote }}
+              value: {{ index .Values.ingress.hosts 0 "host" | quote }}
             - name: WP_PLUGINS
               value: {{ join " " .Values.plugins | quote }}
 {{- if .Values.extraEnv }}

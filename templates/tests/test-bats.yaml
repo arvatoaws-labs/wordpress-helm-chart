@@ -13,5 +13,5 @@ spec:
       - /scripts/run-bats-tests.sh
     env:
       - name: WP_DEFAULT_HOST
-        value: {{ index .Values.ingress.hosts 0 | quote }}
+        value: {{ index .Values.ingress.hosts 0 "host" | quote }}
   restartPolicy: Never

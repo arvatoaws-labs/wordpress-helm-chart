@@ -68,7 +68,7 @@ spec:
         - name: WP_OFFLOAD_CLOUDFRONT
           value: {{ $.Values.offload.cloudfront | quote }}
         - name: WP_DEFAULT_HOST
-          value: {{ index $.Values.ingress.hosts 0 | quote }}
+          value: {{ index $.Values.ingress.hosts 0 "host" | quote }}
         - name: WP_PLUGINS
           value: {{ join " " $.Values.plugins | quote }}
         - name: WORDPRESS_FIRSTNAME
@@ -78,7 +78,7 @@ spec:
         - name: WORDPRESS_BLOGNAME
           value: {{ $.Values.wordpressBlogName | quote }}
         - name: WORDPRESS_BLOGURL
-          value: {{ index $.Values.ingress.hosts 0 | quote }}
+          value: {{ index $.Values.ingress.hosts 0 "host" | quote }}
         - name: WORDPRESS_EMAIL
           value: {{ $.Values.wordpressEmail | quote }}
         - name: WORDPRESS_USERNAME
